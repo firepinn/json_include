@@ -1,19 +1,14 @@
 #!/usr/bin/env python
 # coding: utf-8
-
 import os
 import re
 import json
 from collections import OrderedDict
 import argparse
 
-
 OBJECT_TYPES = (dict, list)
-
 INCLUDE_KEY = '...'
-
-INCLUDE_VALUE_PATTERN = re.compile(r'^<([\w\.]+)>$')
-
+INCLUDE_VALUE_PATTERN = re.compile(r'^include\((.+)\)$')
 _included_cache = {}
 
 
