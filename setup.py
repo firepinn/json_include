@@ -5,7 +5,7 @@ from setuptools import setup
 
 
 # Use semantic versioning: MAJOR.MINOR.PATCH
-version = '0.1.3'
+version = '0.2.0'
 
 
 def get_requires():
@@ -23,8 +23,8 @@ setup(
     name='json-include',
     version=version,
     author='reorx',
-    author_email='novoreorx@gmail.com',
-    url='https://github.com/reorx/json_include',
+    author_email='timur.bazhirov@gmail.com',
+    url='https://github.com/timurbazhirov/json_include',
     description='An extension for JSON to support file including',
     long_description=get_long_description(),
     py_modules=[
