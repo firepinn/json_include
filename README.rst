@@ -17,10 +17,10 @@ formatted as:
 .. code-block:: json
 
     {
-        "...": "<json file name>"
+        "...": "include(<json file name>)"
     }
 
-The include syntax means that this object (the whole ``{"...": "<json file name>"}``) in JSON
+The include syntax means that this object (the whole ``{"...": "include(<json file name>")}``) in JSON
 is a reference to the JSON file named in ``<json file name>`` notation,
 and should be included into its place.
 
@@ -36,7 +36,7 @@ be written as follows:
     {
         "username": "alice",
         "profile": {
-            "...": "<profile_model.json>"
+            "...": "include(profile_model.json)"
         }
     }
 
@@ -108,6 +108,6 @@ and ``test/`` can also give you better understandings of how it works.
 TODOs
 -----
 
-- [ ] Prevent circluar inclusion
-- [ ] Test circluar inclusion
+- [ ] Prevent circular inclusion
+- [ ] Test circular inclusion
 - [ ] Test invalid syntax
