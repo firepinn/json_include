@@ -33,8 +33,10 @@ def walk_through_to_include(o, dirpath):
             if include_name:
                 is_include_exp = True
                 o.clear()
+                # enable relative directory references: `../../`
+                _f = os.path.join(dirpath, include_name)
                 if include_name not in _included_cache:
-                    _included_cache[include_name] = parse_json_include(dirpath, include_name, True)
+                    _included_cache[include_name] = parse_json_include(os.path.dirname(_f), os.path.basename(_f), True)
                 o.update(_included_cache[include_name])
 
         if is_include_exp:
