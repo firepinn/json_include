@@ -9,6 +9,7 @@ import argparse
 OBJECT_TYPES = (dict, list)
 INCLUDE_KEY = '...'
 INCLUDE_VALUE_PATTERN = re.compile(r'^include\((.+)\)$')
+INCLUDE_TEXT_PATTERN = re.compile(r'^include_text\((.+)\)$')
 _included_cache = {}
 
 
@@ -17,9 +18,9 @@ def read_file(filepath):
         return f.read()
 
 
-def get_include_name(value):
+def get_include_name(value, regex):
     if isinstance(value, basestring):
-        rv = INCLUDE_VALUE_PATTERN.search(value)
+        rv = regex.search(value)
         if rv:
             return rv.groups()[0]
     return None
@@ -29,15 +30,25 @@ def walk_through_to_include(o, dirpath):
     if isinstance(o, dict):
         is_include_exp = False
         if set(o) == set([INCLUDE_KEY]):
-            include_name = get_include_name(o.values()[0])
+            include_name = get_include_name(o.values()[0], INCLUDE_VALUE_PATTERN)
             if include_name:
                 is_include_exp = True
                 o.clear()
                 # enable relative directory references: `../../`
                 _f = os.path.join(dirpath, include_name)
                 if include_name not in _included_cache:
-                    _included_cache[include_name] = parse_json_include(os.path.dirname(_f), os.path.basename(_f), True)
+                    _included_cache[include_name] = parse_json_include(
+                        os.path.dirname(_f), os.path.basename(_f), True)
                 o.update(_included_cache[include_name])
+
+        include_text_keys = [key for key in o.keys()
+                             if isinstance(o[key], basestring) and INCLUDE_TEXT_PATTERN.search(o[key])]
+        for key in include_text_keys:
+            include_filename = get_include_name(o[key], INCLUDE_TEXT_PATTERN)
+            if include_filename:
+                _f = os.path.join(dirpath, include_filename)
+                with open(os.path.join(_f)) as file:
+                    o[key] = file.read()
 
         if is_include_exp:
             return

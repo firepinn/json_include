@@ -20,16 +20,20 @@ formatted as:
         "...": "include(<json file name>)"
     }
 
-The include syntax means that this object (the whole ``{"...": "include(<json file name>")}``) in JSON
-is a reference to the JSON file named in ``<json file name>`` notation,
-and should be included into its place.
+or
 
-The included JSON should always be an object (dict) rather than an array (list),
-to prevent implicit meaning and make sure we can get a clear view of the structure
-without looking into the included JSON files.
+.. code-block:: json
 
-In a normal JSON when we want to include another JSON on an attribute, it should
-be written as follows:
+    {
+        "<any key>": "include_text(<text file name>)"
+    }
+
+
+The include syntax means that this object (the whole ``{"...": "include(<json file name>")}``) in JSON is a reference to the JSON file named in ``<json file name>`` notation, and should be included into its place.
+
+The included JSON should always be an object (dict) rather than an array (list), to prevent implicit meaning and make sure we can get a clear view of the structure without looking into the included JSON files.
+
+In a normal JSON when we want to include another JSON on an attribute, it should be written as follows:
 
 .. code-block:: json
 
@@ -77,7 +81,7 @@ Installation
 
 ::
 
-    pip install json-include
+    pip install https://github.com/timurbazhirov/json_include/archive/master.zip
 
 Usage
 ~~~~~
