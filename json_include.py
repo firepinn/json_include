@@ -3,6 +3,8 @@
 import os
 import re
 import json
+import random
+import string
 from collections import OrderedDict
 import argparse
 
@@ -11,6 +13,10 @@ INCLUDE_KEY = '...'
 INCLUDE_VALUE_PATTERN = re.compile(r'^include\((.+)\)$')
 INCLUDE_TEXT_PATTERN = re.compile(r'^include_text\((.+)\)$')
 _included_cache = {}
+
+
+def random_string(N=9):
+    return ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(N))
 
 
 def read_file(filepath):
@@ -26,9 +32,22 @@ def get_include_name(value, regex):
     return None
 
 
+def make_unique(obj, key):
+    """
+    Walk through the dict and add random string to the value at key
+    """
+    if key in obj and isinstance(obj[key], basestring):
+        obj[key] = obj[key] + "-" + random_string()
+    for k, v in obj.items():
+        if isinstance(v, dict):
+            make_unique(v, key)
+    return obj
+
+
 def walk_through_to_include(o, dirpath):
     if isinstance(o, dict):
         is_include_exp = False
+        make_unique_key = o.pop('makeUnique', None)
         if set(o) == set([INCLUDE_KEY]):
             include_name = get_include_name(o.values()[0], INCLUDE_VALUE_PATTERN)
             if include_name:
@@ -39,7 +58,8 @@ def walk_through_to_include(o, dirpath):
                 if include_name not in _included_cache:
                     _included_cache[include_name] = parse_json_include(
                         os.path.dirname(_f), os.path.basename(_f), True)
-                o.update(_included_cache[include_name])
+                _data = _included_cache[include_name]
+                o.update(make_unique(_data, make_unique_key) if make_unique_key else _data)
 
         include_text_keys = [key for key in o.keys()
                              if isinstance(o[key], basestring) and INCLUDE_TEXT_PATTERN.search(o[key])]

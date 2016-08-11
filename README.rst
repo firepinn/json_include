@@ -33,6 +33,16 @@ The include syntax means that this object (the whole ``{"...": "include(<json fi
 
 The included JSON should always be an object (dict) rather than an array (list), to prevent implicit meaning and make sure we can get a clear view of the structure without looking into the included JSON files.
 
+In case multiple include statements are used, passing key inside `makeUnique` adds a random string to each included value at the corresponding key:
+
+.. code-block:: json
+
+    {
+        "...": "include(<json file name>)",
+        "makeUnique": "<key>"
+    }
+
+
 In a normal JSON when we want to include another JSON on an attribute, it should be written as follows:
 
 .. code-block:: json
