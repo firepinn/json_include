@@ -32,15 +32,20 @@ def get_include_name(value, regex):
     return None
 
 
-def make_unique(obj, key):
+def make_unique(obj, key, original=None, replacement=None):
     """
     Walk through the dict and add random string to the value at key
+    and all other occurences of the same value.
     """
     if key in obj and isinstance(obj[key], basestring):
-        obj[key] = obj[key] + "-" + random_string()
+        original = obj[key]
+        replacement = obj[key] + "-" + random_string()
+        obj[key] = replacement
     for k, v in obj.items():
+        if original and v == original:
+            obj[k] = replacement
         if isinstance(v, dict):
-            make_unique(v, key)
+            make_unique(v, key, original, replacement)
     return obj
 
 
