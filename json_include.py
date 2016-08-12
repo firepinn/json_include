@@ -90,7 +90,8 @@ def walk_through_to_include(o, dirpath):
 def parse_json_include(dirpath, filename, is_include=False):
     filepath = os.path.join(dirpath, filename)
     json_str = read_file(filepath)
-    d = json.loads(json_str, object_pairs_hook=OrderedDict)
+    # d = json.loads(json_str, object_pairs_hook=OrderedDict)
+    d = resolve_extend_replace(json_str, filepath)
 
     if is_include:
         assert isinstance(d, dict),\
@@ -136,6 +137,54 @@ def build_json_include_to_files(dirpath, filenames, target_dirpath, indent=4):
         target_filepath = os.path.join(target_dirpath, i)
         with open(target_filepath, 'w') as f:
             f.write(json)
+
+
+def resolve_extend_replace(str, filepath):
+    """
+    Resolve the content `$extend` and `$replace` keys:
+
+    {
+        "$extend": {
+            "name": "parent.json"
+        },
+        "$replace": [
+            {
+                "where": {
+                    "key": "units",
+                    "idx": 4
+                },
+                "with": "$this.units"
+            },
+
+    :param str str: json string with file content
+    :param str filepath: path to the file
+    :rtype: dict
+    """
+    obj = json.loads(str, object_pairs_hook=OrderedDict)
+    extend = obj.get("$extend", {})
+    replace = obj.get("$replace", {})
+    filename = extend.get("name", None)
+    if filename:
+        json_string = read_file(os.path.join(os.path.dirname(filepath), filename))
+        json_data = json.loads(json_string, object_pairs_hook=OrderedDict)
+        idx_cache = 0
+        for entry in replace:
+            key = entry["where"]["key"]
+            idx = entry["where"].get("idx", None)
+            idx = idx + idx_cache if idx else None
+            _d = entry["with"]
+            _repl = obj.get(_d.replace("$this.", "")) if _d and "$this." in _d else _d
+            _value = json_data[key]
+            if idx and isinstance(_value, list):
+                del _value[idx]
+                if isinstance(_repl, list):
+                    for _in, _el in enumerate(_repl):
+                        _value.insert(idx + _in, _el)
+                        idx_cache += 1
+                _repl = _value
+            json_data[key] = _repl
+        obj = json_data
+    return obj
 
 
 def main():

@@ -28,6 +28,27 @@ or
         "<any key>": "include_text(<text file name>)"
     }
 
+or
+
+.. code-block:: json
+
+    {
+        "$extend": {
+            "name": "path_to_parent_file.json"
+        },
+        "$replace": [
+            {
+                "where": {
+                    "key": "units",
+                    "idx": 4
+                },
+                "with": "$this.units"
+            }
+        ],
+        "units": ["m", "kg"]
+    }
+
+
 
 The include syntax means that this object (the whole ``{"...": "include(<json file name>")}``) in JSON is a reference to the JSON file named in ``<json file name>`` notation, and should be included into its place.
 
