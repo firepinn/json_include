@@ -197,28 +197,31 @@ def resolve_extend_replace(str, filepath):
     :rtype: dict
     """
     obj = json.loads(str, object_pairs_hook=OrderedDict)
+    if not isinstance(obj, dict):
+        return obj
     extend = obj.get("$extend", {})
     replace = obj.get("$replace", {})
     filename = extend.get("name", None)
     if filename:
         json_string = read_file(os.path.join(os.path.dirname(filepath), filename))
         json_data = json.loads(json_string, object_pairs_hook=OrderedDict)
-        idx_cache = 0
         for entry in replace:
             key = entry["where"]["key"]
             idx = entry["where"].get("idx", None)
-            idx = idx + idx_cache if idx else None
-            _d = entry["with"]
-            _repl = obj.get(_d.replace("$this.", "")) if _d and "$this." in _d else _d
-            _value = json_data[key]
-            if idx and isinstance(_value, list):
-                del _value[idx]
-                if isinstance(_repl, list):
-                    for _in, _el in enumerate(_repl):
-                        _value.insert(idx + _in, _el)
+            idx_cache = 0
+            _with = entry["with"]
+            _replacement = obj.get(_with.replace("$this.", "")) if _with and "$this." in _with else _with
+            _current_value = json_data[key]
+            if (idx or idx == 0) and isinstance(_current_value, list):
+                del _current_value[idx]
+                if isinstance(_replacement, list):
+                    for _in, _el in enumerate(_replacement):
+                        _current_value.insert(idx + _in, _el)
                         idx_cache += 1
-                _repl = _value
-            json_data[key] = _repl
+                else:
+                    _current_value.insert(idx, _replacement)
+                _replacement = _current_value
+            json_data[key] = _replacement
         obj = json_data
     return obj
 
