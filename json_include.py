@@ -31,12 +31,22 @@ def read_file(filepath):
 
 
 def get_include_name(value, regex_list):
-    for idx, regex in enumerate(regex_list):
+    if not isinstance(regex_list, list):
+        # passing single regex only
+        regex = regex_list
         if isinstance(value, basestring):
             rv = regex.search(value)
             if rv:
-                return rv.groups(), idx
-    return None, None
+                return rv.groups()[0]
+        return None
+    else:
+        # passing list of regex`s
+        for idx, regex in enumerate(regex_list):
+            if isinstance(value, basestring):
+                rv = regex.search(value)
+                if rv:
+                    return rv.groups(), idx
+        return None, None
 
 
 def lookup(dic, key, *keys):
