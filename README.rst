@@ -112,7 +112,7 @@ Installation
 
 ::
 
-    pip install https://github.com/timurbazhirov/json_include/archive/master.zip
+    pip install https://github.com/exabyte-io/json_include/archive/master.zip
 
 Usage
 ~~~~~
