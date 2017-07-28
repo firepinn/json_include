@@ -17,7 +17,7 @@ INCLUDE_VALUE_PATTERNS = [
 INCLUDE_TEXT_PATTERN = re.compile(r'^include_text\((.+)\)$')
 
 
-class JsonInclude(object):
+class JSONInclude(object):
     def __init__(self):
         self._included_cache = None
         self._original_schemas = None
