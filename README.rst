@@ -97,7 +97,8 @@ Installation
 Usage
 ~~~~~
 
-```py
-import jsonInclude
-jsonInclude.build_json(ROOT_DIR, 'example.json')
-```
+.. code-block:: python
+
+    import jsonInclude
+    jsonInclude.build_json(ROOT_DIR, 'example.json')
+
