@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(
-    name='jsonInclude',
+    name='json_include',
     version='0.2.9',
     description='An extension for JSON to support file including',
     url='https://github.com/Exabyte-io/json_include',
