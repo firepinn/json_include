@@ -95,7 +95,7 @@ class JSONInclude(object):
                     if include_idx == 0:
                         # include local definitions
                         self._included_cache[include_name] = self._include_definition(include_name,
-                                                                                     self._original_schemas[-1])
+                                                                                      self._original_schemas[-1])
                     elif include_idx == 2:
                         # include remote definitions
                         include_name = include_info[1]
@@ -227,3 +227,7 @@ class JSONInclude(object):
                 json_data[key] = _replacement
             obj = json_data
         return obj
+
+
+def build_json(dirpath, filename, indent=4):
+    return JSONInclude().build_json_include(dirpath, filename, indent)

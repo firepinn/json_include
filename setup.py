@@ -7,7 +7,7 @@ setup(
     url='https://github.com/Exabyte-io/json_include',
     author='Exabyte Inc.',
     author_email='info@exabyte.io',
-    packages=["jsonInclude"],
+    py_modules=["json_include"],
     classifiers=[
         'Programming Language :: Python',
         'Development Status :: 3 - Alpha',
