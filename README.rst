@@ -99,6 +99,6 @@ Usage
 
 .. code-block:: python
 
-    import jsonInclude
-    jsonInclude.build_json(ROOT_DIR, 'example.json')
+    import json_include
+    json_include.build_json(ROOT_DIR, 'example.json')
 
