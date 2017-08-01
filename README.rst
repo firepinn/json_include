@@ -28,26 +28,6 @@ or
         "<any key>": "include_text(<text file name>)"
     }
 
-or
-
-.. code-block:: json
-
-    {
-        "$extend": {
-            "name": "path_to_parent_file.json"
-        },
-        "$replace": [
-            {
-                "where": {
-                    "key": "units",
-                    "idx": 4
-                },
-                "with": "$this.units"
-            }
-        ],
-        "units": ["m", "kg"]
-    }
-
 
 
 The include syntax means that this object (the whole ``{"...": "include(<json file name>")}``) in JSON is a reference to the JSON file named in ``<json file name>`` notation, and should be included into its place.
@@ -117,32 +97,8 @@ Installation
 Usage
 ~~~~~
 
-By installation a command called ``json-include`` will be registerd as an entry point,
-use it as follows::
+.. code-block:: python
 
-    usage: json-include [-h] DIR FILE
+    import jsonInclude
+    jsonInclude.build_json(ROOT_DIR, 'example.json')
 
-    Command line tool to build JSON file by include syntax.
-
-    positional arguments:
-      DIR         The directory path of source json files
-      FILE        The name of the source json file
-
-    optional arguments:
-      -h, --help  show this help message and exit
-
-For example::
-
-    json-include test/source_json/ c.json
-
-The parsed and built result of ``c.json`` will be printed.
-
-Further usage of ``json_include`` package is documented in its source code,
-and ``test/`` can also give you better understandings of how it works.
-
-TODOs
------
-
-- [ ] Prevent circular inclusion
-- [ ] Test circular inclusion
-- [ ] Test invalid syntax
