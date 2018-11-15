@@ -86,7 +86,6 @@ class JSONInclude(object):
             for item in data: self._cleanup_before_inclusion(item)
             return
         data.pop('$schema', None)  # remove $schema property before inclusion
-        data.pop('title', None)  # remove title property before inclusion
 
     def _walk_through_to_include(self, o, dirpath):
         if isinstance(o, dict):
