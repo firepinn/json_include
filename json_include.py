@@ -75,12 +75,17 @@ class JSONInclude(object):
     def _include_remote_file(self, dirpath, include_name):
         _f = os.path.join(dirpath, include_name)
         if include_name not in self._included_cache:
-            remote_schema = self._parse_json_include(os.path.dirname(_f), os.path.basename(_f), True)
-            remote_schema.pop('$schema', None)  # remove $schema property before inclusion
-            remote_schema.pop('title', None)  # remove title property before inclusion
+            remote_schema = self._parse_json_include(os.path.dirname(_f), os.path.basename(_f))
+            self._cleanup_before_inclusion(remote_schema)
             return remote_schema
         else:
             return self._included_cache[include_name]
+
+    def _cleanup_before_inclusion(self, data):
+        if isinstance(data, list):
+            for item in data: self._cleanup_before_inclusion(item)
+            return
+        data.pop('$schema', None)  # remove $schema property before inclusion
 
     def _walk_through_to_include(self, o, dirpath):
         if isinstance(o, dict):
@@ -126,15 +131,11 @@ class JSONInclude(object):
                 if isinstance(i, OBJECT_TYPES):
                     self._walk_through_to_include(i, dirpath)
 
-    def _parse_json_include(self, dirpath, filename, is_include=False):
+    def _parse_json_include(self, dirpath, filename):
         filepath = os.path.join(dirpath, filename)
         json_str = self._read_file(filepath)
         d = self._resolve_extend_replace(json_str, filepath)
         self._original_schemas.append(d)
-
-        if is_include:
-            assert isinstance(d, dict), \
-                'The JSON file being included should always be a dict rather than a list'
 
         self._walk_through_to_include(d, dirpath)
         self._original_schemas.pop()
