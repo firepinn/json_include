@@ -1,9 +1,9 @@
 from setuptools import setup
 
 setup(
-    name='json_include',
-    version='0.2.9',
-    description='An extension for JSON to support file including',
+    name='exabyte_json_include',
+    version='0.1.0',
+    description='An extension for json_include to support file inclusion',
     url='https://github.com/Exabyte-io/json_include',
     author='Exabyte Inc.',
     author_email='info@exabyte.io',
