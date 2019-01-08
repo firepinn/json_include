@@ -13,6 +13,8 @@ INCLUDE_VALUE_PATTERNS = [
     re.compile(r'^include\((.+)\)$'),  # include
     re.compile(r'^file:(.+)?#/(.+)$'),  # remote definition inclusion
     re.compile(r'^file:(.+)$'),  # remote file inclusion
+    re.compile(r'^(.+)?#/(.+)$'),  # remote definition inclusion without `file:` pattern
+    re.compile(r'^(.+)$'),  # remote file inclusion without `file:` pattern (must be the last one)
 ]
 INCLUDE_TEXT_PATTERN = re.compile(r'^include_text\((.+)\)$')
 
@@ -101,7 +103,7 @@ class JSONInclude(object):
                         # include local definitions
                         self._included_cache[include_name] = self._include_definition(include_name,
                                                                                       self._original_schemas[-1])
-                    elif include_idx == 2:
+                    elif include_idx in [2, 4]:
                         # include remote definitions
                         include_name = include_info[1]
                         remote_file_schema = self._include_remote_file(dirpath, include_info[0])
