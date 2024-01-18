@@ -127,7 +127,7 @@ class JSONInclude(object):
                         o[key] = file.read()
             if is_include_exp:
                 return
-            for k, v in o.iteritems():
+            for k, v in o.items():
                 if isinstance(v, OBJECT_TYPES):
                     self._walk_through_to_include(v, dirpath)
         elif isinstance(o, list):
