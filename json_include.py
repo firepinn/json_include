@@ -146,7 +146,7 @@ class JSONInclude(object):
 
         return d
 
-    def build_json_include(self, dirpath, filename, indent=4):
+    def _load_json_include(self, dirpath, filename):
         """Parse a json file and build it by the include expression recursively.
 
         :param str dirpath: The directory path of source json files.
@@ -156,7 +156,19 @@ class JSONInclude(object):
         """
         self._included_cache = {}
         self._original_schemas = []
-        d = self._parse_json_include(dirpath, filename)
+        return self._parse_json_include(dirpath, filename)
+    
+    def _build_json_include(self, dirpath, filename, indent=4):
+        """Parse a json file and build it by the include expression recursively.
+
+        :param str dirpath: The directory path of source json files.
+        :param str filename: The name of the source json file.
+        :return: A json string with its include expression replaced by the indicated data.
+        :rtype: str
+        """
+        self._included_cache = {}
+        self._original_schemas = []
+        d = self.load_json_include(dirpath, filename)
         return json.dumps(d, indent=indent, separators=(',', ': '))
 
     def _build_json_include_to_files(self, dirpath, filenames, target_dirpath, indent=4):
@@ -235,4 +247,8 @@ class JSONInclude(object):
 
 
 def build_json(dirpath, filename, indent=4):
-    return JSONInclude().build_json_include(dirpath, filename, indent)
+    return JSONInclude()._build_json_include(dirpath, filename, indent)
+
+
+def load_json(dirpath, filename):
+    return JSONInclude()._load_json_include(dirpath, filename)
