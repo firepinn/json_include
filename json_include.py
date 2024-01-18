@@ -35,7 +35,7 @@ class JSONInclude(object):
         if not isinstance(regex_list, list):
             # passing single regex only
             regex = regex_list
-            if isinstance(value, basestring):
+            if isinstance(value, str):
                 rv = regex.search(value)
                 if rv:
                     return rv.groups()[0]
@@ -43,7 +43,7 @@ class JSONInclude(object):
         else:
             # passing list of regex`s
             for idx, regex in enumerate(regex_list):
-                if isinstance(value, basestring):
+                if isinstance(value, str):
                     rv = regex.search(value)
                     if rv:
                         return rv.groups(), idx
@@ -59,7 +59,7 @@ class JSONInclude(object):
         Walk through the dict and add random string to the value at key
         and all other occurrences of the same value.
         """
-        if key in obj and isinstance(obj[key], basestring):
+        if key in obj and isinstance(obj[key], str):
             original = obj[key]
             replacement = obj[key] + "-" + self._random_string()
             obj[key] = replacement
@@ -118,7 +118,7 @@ class JSONInclude(object):
                     if not isinstance(_data, dict): _data = {include_key: _data}
                     o.update(self._make_unique(_data, make_unique_key) if make_unique_key else _data)
             include_text_keys = [key for key in o.keys()
-                                 if isinstance(o[key], basestring) and INCLUDE_TEXT_PATTERN.search(o[key])]
+                                 if isinstance(o[key], str) and INCLUDE_TEXT_PATTERN.search(o[key])]
             for key in include_text_keys:
                 include_filename = self._get_include_name(o[key], INCLUDE_TEXT_PATTERN)
                 if include_filename:
