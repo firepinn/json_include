@@ -92,7 +92,7 @@ Installation
 
 ::
 
-    pip install https://github.com/exabyte-io/json_include/archive/master.zip
+    pip install https://github.com/firepinn/json_include/archive/v2.1.0.zip
 
 Usage
 ~~~~~

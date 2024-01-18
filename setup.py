@@ -1,12 +1,12 @@
 from setuptools import setup
 
 setup(
-    name='exabyte_json_include',
-    version='2.0.0',
+    name='firepinn_json_include',
+    version='2.1.0',
     description='An extension for json_include to support file inclusion',
-    url='https://github.com/Exabyte-io/json_include',
-    author='Exabyte Inc.',
-    author_email='info@exabyte.io',
+    url='https://github.com/firepinn/json_include',
+    author='firepinn',
+    author_email='firepinn@gmail.com',
     py_modules=["json_include"],
     classifiers=[
         'Programming Language :: Python',
